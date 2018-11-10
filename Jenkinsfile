@@ -1,20 +1,9 @@
-pipeline {
-    agent any 
-    stages {
-        stage('clean') { 
-            steps {
-                sh "mvn clean"
-            }
-        }
-        stage('Test') { 
-            steps {
-                sh "mvn test"
-            }
-        }
-        stage('Deploy') { 
-            steps {
-                sh "mvn package"
-            }
-        }
-    }
-}
+node{
+     stage('SCM checkout'){
+     git 'https://github.com/ishan00786/my-app.git'
+     } 
+     stage('compile-package'){
+     def mvnhome = tool name: 'maven', type: 'maven'
+     sh "${mvnhome}/bin/mvn package"
+     }
+} 
