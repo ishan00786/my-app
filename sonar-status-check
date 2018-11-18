@@ -1,0 +1,37 @@
+node{
+     stage('SCM checkout'){
+     git 'https://github.com/ishan00786/my-app.git'
+     } 
+     stage('compile-package'){
+     def mvnhome = tool name: 'maven', type: 'maven'
+     sh "${mvnhome}/bin/mvn package"
+     }
+     stage('Sonar Analysis'){
+     def mvnhome = tool name: 'maven', type: 'maven'
+     withSonarQubeEnv('sonar-6'){
+     sh "${mvnhome}/bin/mvn sonar:sonar"
+     }
+     }
+     stage("Quality Gate Status Check"){
+          timeout(time: 1, unit: 'HOURS') {
+              def qg = waitForQualityGate()
+              if (qg.status != 'OK') {
+                  mail bcc: '', body: '''Hi Ishan,
+
+                  sonar jobs is failed successfully.
+
+                  Thanks,
+                  Ishen''', cc: '', from: '', replyTo: '', subject: 'Jenkins job is completed successfully', to: 'ishan.thapa786@gmail.com'
+                  error "Pipeline aborted due to quality gate failure: ${qg.status}"
+              }
+          }
+      } 
+     stage('Email notification'){
+     mail bcc: '', body: '''Hi Ishan,
+
+     Jenkins jobs is completed successfully.
+
+     Thanks,
+     Ishen''', cc: '', from: '', replyTo: '', subject: 'Jenkins job is completed successfully', to: 'ishan.thapa786@gmail.com'
+     }
+} 
