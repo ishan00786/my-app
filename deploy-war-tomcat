@@ -7,8 +7,8 @@ node{
      sh "${mvnhome}/bin/mvn package"
      }
      stage('Deploy to tomcat'){
-     sshagent(['tomcat-dev']) {
-     sh 'scp -o StrictHostKeyChecking=no target/*.war ec2-user@52.15.156.28:/opt/tomcat9/webapps/'
+     sshagent(['tomcat-dev2']) {
+     sh 'scp -o StrictHostKeyChecking=no target/*.war ec2-user@http://52.90.191.62:/usr/local/tomcat9/webapps'
      }
      }
      stage('Email notification'){
@@ -20,3 +20,5 @@ node{
      Ishen''', cc: '', from: '', replyTo: '', subject: 'Jenkins job is completed successfully', to: 'ishan.thapa786@gmail.com'
      }
 }
+
+
