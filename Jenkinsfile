@@ -12,12 +12,4 @@ node{
      sh "${mvnhome}/bin/mvn sonar:sonar"
      }
      }
-     stage('Email notification'){
-     mail bcc: '', body: '''Hi Ishan,
-
-     Jenkins jobs is completed successfully.
-
-     Thanks,
-     Ishen''', cc: '', from: '', replyTo: '', subject: 'Jenkins job is completed successfully', to: 'ishan.thapa786@gmail.com'
-     }
 } 
